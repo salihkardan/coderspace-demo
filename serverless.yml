@@ -1,0 +1,30 @@
+service: coderspace
+
+custom:
+  stage: dev
+  region: us-east-1
+  deploymentBucket: S3_BUCKET
+  accountId: AWS_ACCOUNT_ID
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  memorySize: 128
+  timeout: 30
+  deploymentBucket: ${self:custom.deploymentBucket}
+  environment:
+    TEST_ENV: "coderspace"
+
+package:
+  individually: true
+
+functions:
+  coderspace:
+    name: coderspace
+    handler: index.coderspace
+    events:
+      - httpApi:
+          method: POST
+          path: /coderspace
